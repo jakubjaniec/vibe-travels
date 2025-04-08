@@ -30,43 +30,43 @@ Użytkownicy napotykają trudności na początku procesu planowania podróży z 
 - Brak systemu powiadomień
 
 ## 5. Historyjki użytkowników
-US-001
-Tytuł: Rejestracja i logowanie
-Opis: Jako nowy użytkownik chcę założyć konto oraz zalogować się, aby móc korzystać z aplikacji i tworzyć swoje notatki podróżnicze.
+US-001  
+Tytuł: Rejestracja i logowanie  
+Opis: Jako nowy użytkownik chcę założyć konto oraz zalogować się, aby móc korzystać z aplikacji i tworzyć swoje notatki podróżnicze.  
 Kryteria akceptacji:
 - Użytkownik może zarejestrować się, podając wymagane dane (email, hasło).
 - Po udanej rejestracji użytkownik otrzymuje potwierdzenie.
 - Użytkownik może zalogować się przy użyciu poprawnych danych.
 
-US-002
-Tytuł: Uzupełnienie i modyfikacja profilu użytkownika
-Opis: Jako zalogowany użytkownik pragnę uzupełnić swoje preferencje turystyczne, aby aplikacja mogła dostosować generowany plan podróży do moich potrzeb.
+US-002  
+Tytuł: Uzupełnienie i modyfikacja profilu użytkownika  
+Opis: Jako zalogowany użytkownik pragnę uzupełnić swoje preferencje turystyczne, aby aplikacja mogła dostosować generowany plan podróży do moich potrzeb.  
 Kryteria akceptacji:
 - Użytkownik uzyskuje dostęp do strony profilu.
 - Profil zawiera pola: typ podróży, budżet, styl, liczba osób, długość wyjazdu, poziom aktywności, preferowane klimaty, ograniczenia.
 - Zmiany w profilu są zapisywane i dostępne przy kolejnych logowaniach.
 
-US-003
-Tytuł: Zarządzanie notatkami podróżniczymi
-Opis: Jako użytkownik chcę zapisywać, edytować, przeglądać oraz usuwać notatki o przyszłych wycieczkach, aby łatwo zarządzać swoimi pomysłami na wyjazdy.
+US-003  
+Tytuł: Zarządzanie notatkami podróżniczymi  
+Opis: Jako użytkownik chcę zapisywać, edytować, przeglądać oraz usuwać notatki o przyszłych wycieczkach, aby łatwo zarządzać swoimi pomysłami na wyjazdy.  
 Kryteria akceptacji:
 - Użytkownik może dodać nową notatkę.
 - Użytkownik może edytować istniejące notatki i zatwierdzać wprowadzone zmiany.
 - Użytkownik może usuwać notatki.
 - Notatki są powiązane z kontem użytkownika i zapisywane w bazie danych.
 
-US-004
-Tytuł: Generowanie planu podróży
-Opis: Jako użytkownik chcę wygenerować szczegółowy plan podróży na podstawie zapisanej notatki, aby otrzymać gotowy plan wyjazdu, uwzględniający moje preferencje.
+US-004  
+Tytuł: Generowanie planu podróży  
+Opis: Jako użytkownik chcę wygenerować szczegółowy plan podróży na podstawie zapisanej notatki, aby otrzymać gotowy plan wyjazdu, uwzględniający moje preferencje.  
 Kryteria akceptacji:
 - Notatka musi zawierać od 100 do 10 000 znaków.
 - Po kliknięciu przycisku generowania planu, system przetwarza notatkę za pomocą integracji z systemem AI.
 - Użytkownik otrzymuje szczegółowy plan podróży, dostosowany do danych zawartych w profilu.
 - Akcja generowania planu jest logowana w bazie danych.
 
-US-005
-Tytuł: Bezpieczny dostęp i autoryzacja
-Opis: Jako użytkownik chcę mieć pewność, że moje dane są chronione, a dostęp do funkcji generowania planu podróży jest możliwy tylko po poprawnej autoryzacji.
+US-005  
+Tytuł: Bezpieczny dostęp i autoryzacja  
+Opis: Jako użytkownik chcę mieć pewność, że moje dane są chronione, a dostęp do funkcji generowania planu podróży jest możliwy tylko po poprawnej autoryzacji.  
 Kryteria akceptacji:
 - Funkcja generowania planu jest dostępna tylko dla zalogowanych użytkowników.
 - Próba dostępu przez niezalogowanego użytkownika skutkuje odmową i wyświetleniem stosownego komunikatu o błędzie.
