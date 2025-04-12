@@ -31,7 +31,6 @@ For example:
 20240906123045_create_profiles.sql
 ```
 
-
 ## SQL Guidelines
 
 Write Postgres-compatible SQL code for Supabase migration files that:
