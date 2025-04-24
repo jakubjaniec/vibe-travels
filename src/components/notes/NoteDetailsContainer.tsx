@@ -1,7 +1,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Loader } from "@/components/ui/loader";
-import type { TravelNoteDTO } from "@/types";
+import type { TravelNoteDTO, UpdateTravelNoteCommand } from "@/types";
 import { useEffect, useState } from "react";
 import AiPlanModule from "./AiPlanModule";
 import NoteContent from "./NoteContent";
@@ -134,6 +134,48 @@ export default function NoteDetailsContainer({ noteId }: Props) {
     fetchData();
   }, [noteId]);
 
+  const handleSave = async (command: UpdateTravelNoteCommand) => {
+    try {
+      // Mock API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Update local state
+      setViewModel((prev) => ({
+        ...prev,
+        note: prev.note
+          ? {
+              ...prev.note,
+              ...command,
+              updated_at: new Date().toISOString(),
+            }
+          : null,
+      }));
+
+      /* Real API call (commented out for now)
+      const response = await fetch(`/api/travel-notes/${noteId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(command),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update note");
+      }
+
+      const updatedNote: TravelNoteDTO = await response.json();
+      setViewModel(prev => ({
+        ...prev,
+        note: updatedNote,
+      }));
+      */
+    } catch (error) {
+      console.error("Error updating note:", error);
+      throw error;
+    }
+  };
+
   if (viewModel.isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
@@ -161,7 +203,7 @@ export default function NoteDetailsContainer({ noteId }: Props) {
   return (
     <div className="space-y-6">
       <Card className="p-6">
-        <NoteContent note={viewModel.note} />
+        <NoteContent note={viewModel.note} onSave={handleSave} />
       </Card>
       <AiPlanModule noteId={noteId} initialPlan={viewModel.plan} note={viewModel.note} />
     </div>

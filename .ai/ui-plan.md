@@ -42,13 +42,23 @@ Aplikacja VibeTravels opiera się na wspólnym layoucie, który zapewnia spójn�
 ### 2.4 Widok szczegółów notatki
 
 - **Ścieżka widoku:** `/notes/:noteId`
-- **Główny cel:** Prezentacja pełnych szczegółów notatki podróżniczej, w tym wygenerowanego przez AI planu podróży.
-- **Kluczowe informacje:** Tytuł notatki, treść notatki, szczegóły wygenerowanego planu (np. plan, data generacji) oraz opcje ponownego generowania planu.
-- **Kluczowe komponenty:** Widok szczegółowy notatki z wbudowanym modułem prezentującym wygenerowany plan, komponent loadera (dla operacji asynchronicznych), przyciski akcji (np. generuj ponownie).
+- **Główny cel:** Prezentacja i edycja szczegółów notatki podróżniczej oraz wygenerowanego planu podróży.
+- **Kluczowe informacje:**
+  - Tryb podglądu: tytuł notatki, treść notatki, szczegóły wygenerowanego planu
+  - Tryb edycji: formularz edycji tytułu i treści z walidacją inline
+  - Data ostatniej modyfikacji, opcje generowania planu
+- **Kluczowe komponenty:**
+  - Widok szczegółowy notatki z możliwością przełączania między trybem podglądu a edycją
+  - Moduł prezentujący wygenerowany plan
+  - Komponent loadera dla operacji asynchronicznych
+  - Przyciski akcji (edytuj, zapisz, anuluj, generuj plan)
 - **UX, dostępność i bezpieczeństwo:**
-  - Intuicyjna prezentacja informacji z logicznym podziałem na sekcje.
-  - Loader dla długotrwałych operacji.
-  - Obsługa błędów z logowaniem do konsoli.
+  - Intuicyjna prezentacja informacji z logicznym podziałem na sekcje
+  - Płynne przejście między trybem podglądu a edycją
+  - Zachowanie stanu edycji w przypadku przypadkowego wyjścia
+  - Loader dla długotrwałych operacji
+  - Obsługa błędów z logowaniem do konsoli
+  - Walidacja formularza w czasie rzeczywistym
 
 ### 2.5 Modal dodawania/edycji notatki
 
