@@ -1,0 +1,14 @@
+---
+import NoteDetailsContainer from "@/components/notes/NoteDetailsContainer";
+import Layout from "@/layouts/Layout.astro";
+
+const { noteId } = Astro.params;
+
+if (!noteId) {
+  return Astro.redirect("/404");
+}
+---
+
+<Layout title="Note Details">
+  <NoteDetailsContainer client:load noteId={noteId} />
+</Layout>
