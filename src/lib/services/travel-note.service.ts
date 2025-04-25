@@ -1,9 +1,8 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "../../db/database.types";
+import type { SupabaseClient } from "../../db/supabase.client";
 import type { CreateTravelNoteCommand, TravelNoteDTO, UpdateTravelNoteCommand } from "../../types";
 
 export class TravelNoteService {
-  constructor(private readonly supabase: SupabaseClient<Database>) {}
+  constructor(private readonly supabase: SupabaseClient) {}
 
   async createTravelNote(userId: string, command: CreateTravelNoteCommand): Promise<TravelNoteDTO> {
     const { data: note, error } = await this.supabase

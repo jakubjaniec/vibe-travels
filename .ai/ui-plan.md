@@ -60,10 +60,10 @@ Aplikacja VibeTravels opiera się na wspólnym layoucie, który zapewnia spójn�
   - Obsługa błędów z logowaniem do konsoli
   - Walidacja formularza w czasie rzeczywistym
 
-### 2.5 Modal dodawania/edycji notatki
+### 2.5 Modal dodawania notatki
 
 - **Ścieżka widoku:** Modal wywoływany z dashboardu.
-- **Główny cel:** Umożliwienie tworzenia i edycji notatek podróżniczych.
+- **Główny cel:** Umożliwienie tworzenia notatek podróżniczych.
 - **Kluczowe informacje:** Formularz z polami: tytuł oraz treść (walidacja inline dla długości treści).
 - **Kluczowe komponenty:** Modal, formularz, mechanizm walidacji inline.
 - **UX, dostępność i bezpieczeństwo:**
