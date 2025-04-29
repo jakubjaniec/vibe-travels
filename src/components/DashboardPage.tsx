@@ -1,5 +1,5 @@
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTravelNotes } from "./hooks/useTravelNotes";
 import { NoteList } from "./NoteList";
 import { CreateNoteModal } from "./notes/create/CreateNoteModal";
@@ -7,23 +7,11 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { Button } from "./ui/button";
 
 export default function DashboardPage() {
-  console.log("DashboardPage rendering");
-  const { notes, loading, error } = useTravelNotes();
+  const { notes, loading, error, mutate } = useTravelNotes();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("DashboardPage mounted");
-    return () => {
-      console.log("DashboardPage unmounted");
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("Current state:", { loading, notesCount: notes.length, error });
-  }, [loading, notes, error]);
-
   const handleNoteCreated = async () => {
-    // await refetch();
+    await mutate();
     setIsCreateModalOpen(false);
   };
 

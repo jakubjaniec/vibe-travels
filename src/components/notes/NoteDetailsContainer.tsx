@@ -1,6 +1,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Loader } from "@/components/ui/loader";
+import { DEFAULT_USER_ID, supabaseClient } from "@/db/supabase.client";
 import type { TravelNoteDTO, UpdateTravelNoteCommand } from "@/types";
 import { useEffect, useState } from "react";
 import AiPlanModule from "./AiPlanModule";
@@ -25,25 +26,7 @@ interface Props {
   noteId: string;
 }
 
-// Mock data for development
-const MOCK_NOTE: TravelNoteDTO = {
-  id: "mock-note-id",
-  title: "Weekend in Paris",
-  content: `I'm planning a weekend trip to Paris in the spring. I'd love to see the main attractions like the Eiffel Tower and the Louvre, but also experience some local culture and cuisine. I'm interested in art, history, and food. Looking for a mix of tourist spots and hidden gems. Budget is moderate, and I prefer walking or public transport.
-
-I'd like to stay in a central location, maybe near Le Marais or Saint-Germain-des-Prés. Planning to arrive on Friday evening and leave on Sunday evening.
-
-Some ideas I've gathered:
-- Visit Musée d'Orsay
-- Walk along Seine River
-- Try local pastries and coffee
-- Visit Luxembourg Gardens
-- Explore Montmartre
-- Evening dinner cruise?`,
-  created_at: "2024-03-20T10:00:00Z",
-  updated_at: "2024-03-20T10:00:00Z",
-};
-
+// Mock data only for the plan
 const MOCK_PLAN: MockTravelPlanDTO = {
   note_id: "mock-note-id",
   title: "Weekend in Paris - Travel Plan",
@@ -95,32 +78,25 @@ export default function NoteDetailsContainer({ noteId }: Props) {
   });
 
   useEffect(() => {
-    // Simulate API call delay
     const fetchData = async () => {
       try {
-        // Simulate network delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const { data: note, error } = await supabaseClient
+          .from("travel_notes")
+          .select("*")
+          .eq("id", noteId)
+          .eq("user_id", DEFAULT_USER_ID)
+          .single();
 
-        // Mock API response
+        if (error) {
+          throw error;
+        }
+
         setViewModel((prev) => ({
           ...prev,
-          note: MOCK_NOTE,
+          note,
           plan: MOCK_PLAN,
           isLoading: false,
         }));
-
-        /* Real API calls (commented out for now)
-        const noteResponse = await fetch(`/api/travel-notes/${noteId}`);
-        if (!noteResponse.ok) {
-          throw new Error("Failed to fetch note details");
-        }
-        const note: TravelNoteDTO = await noteResponse.json();
-
-        const planResponse = await fetch(`/api/travel-notes/${noteId}/plan`);
-        const plan = planResponse.ok ? await planResponse.json() : undefined;
-
-        setViewModel(prev => ({ ...prev, note, plan, isLoading: false }));
-        */
       } catch (error) {
         setViewModel((prev) => ({
           ...prev,
@@ -136,40 +112,26 @@ export default function NoteDetailsContainer({ noteId }: Props) {
 
   const handleSave = async (command: UpdateTravelNoteCommand) => {
     try {
-      // Mock API call for now
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const { data: updatedNote, error } = await supabaseClient
+        .from("travel_notes")
+        .update({
+          title: command.title,
+          content: command.content,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", noteId)
+        .eq("user_id", DEFAULT_USER_ID)
+        .select()
+        .single();
 
-      // Update local state
-      setViewModel((prev) => ({
-        ...prev,
-        note: prev.note
-          ? {
-              ...prev.note,
-              ...command,
-              updated_at: new Date().toISOString(),
-            }
-          : null,
-      }));
-
-      /* Real API call (commented out for now)
-      const response = await fetch(`/api/travel-notes/${noteId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(command),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update note");
+      if (error) {
+        throw error;
       }
 
-      const updatedNote: TravelNoteDTO = await response.json();
-      setViewModel(prev => ({
+      setViewModel((prev) => ({
         ...prev,
         note: updatedNote,
       }));
-      */
     } catch (error) {
       console.error("Error updating note:", error);
       throw error;
@@ -178,34 +140,42 @@ export default function NoteDetailsContainer({ noteId }: Props) {
 
   if (viewModel.isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <Loader />
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex justify-center items-center min-h-[200px]">
+          <Loader />
+        </div>
       </div>
     );
   }
 
   if (viewModel.error) {
     return (
-      <Alert variant="destructive">
-        <AlertDescription>{viewModel.error}</AlertDescription>
-      </Alert>
+      <div className="container mx-auto px-4 py-6">
+        <Alert variant="destructive">
+          <AlertDescription>{viewModel.error}</AlertDescription>
+        </Alert>
+      </div>
     );
   }
 
   if (!viewModel.note) {
     return (
-      <Alert>
-        <AlertDescription>Note not found.</AlertDescription>
-      </Alert>
+      <div className="container mx-auto px-4 py-6">
+        <Alert>
+          <AlertDescription>Note not found.</AlertDescription>
+        </Alert>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <Card className="p-6">
-        <NoteContent note={viewModel.note} onSave={handleSave} />
-      </Card>
-      <AiPlanModule noteId={noteId} initialPlan={viewModel.plan} note={viewModel.note} />
+    <div className="container mx-auto px-4 py-6">
+      <div className="space-y-6">
+        <Card className="p-6">
+          <NoteContent note={viewModel.note} onSave={handleSave} />
+        </Card>
+        <AiPlanModule noteId={noteId} initialPlan={viewModel.plan} note={viewModel.note} />
+      </div>
     </div>
   );
 }

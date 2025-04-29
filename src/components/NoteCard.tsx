@@ -14,11 +14,11 @@ export function NoteCard({ note }: NoteCardProps) {
     <a href={`/notes/${note.id}`} className="block">
       <Card className="cursor-pointer hover:shadow-lg transition-shadow">
         <CardHeader>
-          <CardTitle>{note.title}</CardTitle>
+          <CardTitle className="break-words">{note.title}</CardTitle>
           <p className="text-sm text-muted-foreground">Last updated: {formattedDate}</p>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">{contentPreview}</p>
+          <p className="text-muted-foreground break-words">{contentPreview}</p>
         </CardContent>
       </Card>
     </a>
