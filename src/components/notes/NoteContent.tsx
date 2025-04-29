@@ -4,13 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { TravelNoteDTO, UpdateTravelNoteCommand } from "@/types";
 import { useState } from "react";
+import DeleteNoteDialog from "./DeleteNoteDialog";
 
 interface Props {
   note: TravelNoteDTO;
   onSave?: (command: UpdateTravelNoteCommand) => Promise<void>;
+  onDelete?: () => Promise<void>;
+  isDeleting?: boolean;
 }
 
-export default function NoteContent({ note, onSave }: Props) {
+export default function NoteContent({ note, onSave, onDelete, isDeleting }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
@@ -78,11 +81,14 @@ export default function NoteContent({ note, onSave }: Props) {
     <>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-2xl font-bold">{note.title}</CardTitle>
-        {onSave && (
-          <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
-            Edit
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {onSave && (
+            <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
+          )}
+          {onDelete && <DeleteNoteDialog onConfirm={onDelete} isDeleting={isDeleting} />}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="prose dark:prose-invert max-w-none">

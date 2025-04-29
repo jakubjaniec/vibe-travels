@@ -20,6 +20,7 @@ interface NoteDetailsViewModel {
   plan?: MockTravelPlanDTO;
   isLoading: boolean;
   error?: string;
+  isDeleting?: boolean;
 }
 
 interface Props {
@@ -138,6 +139,32 @@ export default function NoteDetailsContainer({ noteId }: Props) {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      setViewModel((prev) => ({
+        ...prev,
+        isDeleting: true,
+      }));
+
+      const response = await fetch(`/api/travel-notes/${noteId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete note");
+      }
+
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      setViewModel((prev) => ({
+        ...prev,
+        error: "Failed to delete note. Please try again later.",
+        isDeleting: false,
+      }));
+    }
+  };
+
   if (viewModel.isLoading) {
     return (
       <div className="container mx-auto px-4 py-6">
@@ -172,7 +199,12 @@ export default function NoteDetailsContainer({ noteId }: Props) {
     <div className="container mx-auto px-4 py-6">
       <div className="space-y-6">
         <Card className="p-6">
-          <NoteContent note={viewModel.note} onSave={handleSave} />
+          <NoteContent
+            note={viewModel.note}
+            onSave={handleSave}
+            onDelete={handleDelete}
+            isDeleting={viewModel.isDeleting}
+          />
         </Card>
         <AiPlanModule noteId={noteId} initialPlan={viewModel.plan} note={viewModel.note} />
       </div>

@@ -48,3 +48,32 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
     });
   }
 };
+
+export const DELETE: APIRoute = async ({ params, locals }) => {
+  try {
+    // 1. Get and validate noteId from URL
+    const { noteId } = params;
+    const validationResult = noteIdSchema.safeParse(noteId);
+
+    if (!validationResult.success) {
+      return new Response(JSON.stringify({ error: "Invalid note ID format" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // 2. Delete note from database
+    const travelNoteService = new TravelNoteService(locals.supabase);
+    await travelNoteService.deleteTravelNote(DEFAULT_USER_ID, validationResult.data);
+
+    return new Response(null, {
+      status: 204,
+    });
+  } catch (error) {
+    console.error("Error deleting travel note:", error);
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};

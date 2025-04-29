@@ -79,4 +79,27 @@ export class TravelNoteService {
       // We don't throw here as logging failure shouldn't affect the main operation
     }
   }
+
+  async deleteTravelNote(userId: string, noteId: string): Promise<void> {
+    const { error } = await this.supabase.from("travel_notes").delete().eq("id", noteId).eq("user_id", userId);
+
+    if (error) {
+      throw new Error(`Failed to delete travel note: ${error.message}`);
+    }
+
+    await this.logTravelNoteDeletion(userId, noteId);
+  }
+
+  private async logTravelNoteDeletion(userId: string, noteId: string): Promise<void> {
+    const { error } = await this.supabase.from("logs").insert({
+      user_id: userId,
+      action_type: "delete_travel_note",
+      metadata: { note_id: noteId },
+    });
+
+    if (error) {
+      console.error("Failed to log travel note deletion:", error);
+      // We don't throw here as logging failure shouldn't affect the main operation
+    }
+  }
 }
