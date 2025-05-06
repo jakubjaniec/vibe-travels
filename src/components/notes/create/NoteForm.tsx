@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import type { TravelNoteDTO } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -39,15 +38,13 @@ export function NoteForm({ onCancel, onSuccess }: NoteFormProps) {
   const onSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
+
       const response = await fetch("/api/travel-notes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...data,
-          user_id: DEFAULT_USER_ID,
-        }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {

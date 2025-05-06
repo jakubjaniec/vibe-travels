@@ -19,15 +19,24 @@ function mapUserToContext(user: User): ContextUser {
   };
 }
 
-// Eksport domyślny middleware
-export default defineMiddleware(async (context, next) => {
+// Eksport middleware jako onRequest
+export const onRequest = defineMiddleware(async (context, next) => {
   const { url, cookies, redirect } = context;
   const pathname = new URL(url).pathname;
 
+  // Inicjalizacja Supabase z kontekstem żądania
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: context.request.headers,
   });
+
+  // Dodaj instancję Supabase do locals
+  context.locals.supabase = supabase;
+
+  // Dla endpointów API nie sprawdzamy sesji
+  if (pathname.startsWith("/api/")) {
+    return next();
+  }
 
   const {
     data: { session },

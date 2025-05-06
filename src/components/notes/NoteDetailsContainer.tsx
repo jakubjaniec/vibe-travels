@@ -1,7 +1,6 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Loader } from "@/components/ui/loader";
-import { DEFAULT_USER_ID, supabaseClient } from "@/db/supabase.client";
 import type { TravelNoteDTO, UpdateTravelNoteCommand } from "@/types";
 import { useEffect, useState } from "react";
 import AiPlanModule from "./AiPlanModule";
@@ -81,17 +80,13 @@ export default function NoteDetailsContainer({ noteId }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: note, error } = await supabaseClient
-          .from("travel_notes")
-          .select("*")
-          .eq("id", noteId)
-          .eq("user_id", DEFAULT_USER_ID)
-          .single();
-
-        if (error) {
-          throw error;
+        const response = await fetch(`/api/travel-notes/${noteId}`);
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          throw new Error(errorData?.error || "Failed to load note details");
         }
 
+        const note = await response.json();
         setViewModel((prev) => ({
           ...prev,
           note,
@@ -101,7 +96,7 @@ export default function NoteDetailsContainer({ noteId }: Props) {
       } catch (error) {
         setViewModel((prev) => ({
           ...prev,
-          error: "Failed to load note details. Please try again later.",
+          error: error instanceof Error ? error.message : "Failed to load note details. Please try again later.",
           isLoading: false,
         }));
         console.error("Error fetching note details:", error);
@@ -113,22 +108,20 @@ export default function NoteDetailsContainer({ noteId }: Props) {
 
   const handleSave = async (command: UpdateTravelNoteCommand) => {
     try {
-      const { data: updatedNote, error } = await supabaseClient
-        .from("travel_notes")
-        .update({
-          title: command.title,
-          content: command.content,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", noteId)
-        .eq("user_id", DEFAULT_USER_ID)
-        .select()
-        .single();
+      const response = await fetch(`/api/travel-notes/${noteId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(command),
+      });
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || "Failed to update note");
       }
 
+      const updatedNote = await response.json();
       setViewModel((prev) => ({
         ...prev,
         note: updatedNote,

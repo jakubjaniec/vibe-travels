@@ -102,4 +102,19 @@ export class TravelNoteService {
       // We don't throw here as logging failure shouldn't affect the main operation
     }
   }
+
+  async getTravelNote(userId: string, noteId: string): Promise<TravelNoteDTO | null> {
+    const { data: note, error } = await this.supabase
+      .from("travel_notes")
+      .select("id, title, content, created_at, updated_at")
+      .eq("id", noteId)
+      .eq("user_id", userId)
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to fetch travel note: ${error.message}`);
+    }
+
+    return note;
+  }
 }

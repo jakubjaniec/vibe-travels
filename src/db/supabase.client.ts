@@ -10,7 +10,12 @@ export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKe
 
 export type SupabaseClient = typeof supabaseClient;
 
-export const DEFAULT_USER_ID = "8e6f2f68-bb07-44a1-a913-fb128586ff06";
+export async function getUserId(): Promise<string | null> {
+  const {
+    data: { session },
+  } = await supabaseClient.auth.getSession();
+  return session?.user?.id ?? null;
+}
 
 const cookieOptions: CookieOptions = {
   path: "/",

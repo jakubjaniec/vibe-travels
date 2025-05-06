@@ -1,5 +1,4 @@
 import type { Database } from "@/db/database.types";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import type { APIRoute } from "astro";
 import { z } from "zod";
 
@@ -13,7 +12,18 @@ export const POST: APIRoute = async ({ params, locals }) => {
     // 1. Get supabase client from context
     const { supabase } = locals;
 
-    // 2. Get and validate noteId from URL
+    // 2. Get user ID from session
+    const session = await supabase.auth.getSession();
+    const userId = session.data.session?.user?.id;
+
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // 3. Get and validate noteId from URL
     const { noteId } = params;
     const validationResult = noteIdSchema.safeParse(noteId);
 
@@ -24,12 +34,12 @@ export const POST: APIRoute = async ({ params, locals }) => {
       });
     }
 
-    // 3. Fetch travel note from database
+    // 4. Fetch travel note from database
     const { data: note, error: noteError } = await supabase
       .from("travel_notes")
       .select("*")
       .eq("id", validationResult.data)
-      .eq("user_id", DEFAULT_USER_ID)
+      .eq("user_id", userId)
       .single();
 
     if (noteError || !note) {
@@ -52,7 +62,7 @@ export const POST: APIRoute = async ({ params, locals }) => {
       );
     }
 
-    // 4. Generate mock travel plan
+    // 5. Generate mock travel plan
     const mockTravelPlan = {
       note_id: validationResult.data,
       title: `Travel Plan for ${note.title}`,
@@ -60,7 +70,7 @@ export const POST: APIRoute = async ({ params, locals }) => {
       generated_at: new Date().toISOString(),
     } satisfies Database["public"]["Tables"]["travel_plans"]["Insert"];
 
-    // 5. Save generated plan to travel_plans table
+    // 6. Save generated plan to travel_plans table
     const { data: savedPlan, error: saveError } = await supabase
       .from("travel_plans")
       .insert(mockTravelPlan)
@@ -74,9 +84,9 @@ export const POST: APIRoute = async ({ params, locals }) => {
       });
     }
 
-    // 6. Log the action
+    // 7. Log the action
     const { error: logError } = await supabase.from("logs").insert({
-      user_id: DEFAULT_USER_ID,
+      user_id: userId,
       action_type: "GENERATE_TRAVEL_PLAN",
       details: {
         note_id: validationResult.data,
