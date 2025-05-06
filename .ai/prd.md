@@ -55,15 +55,16 @@ Tytuł: Uzupełnienie i modyfikacja profilu użytkownika
 Opis: Jako zalogowany użytkownik pragnę uzupełnić swoje preferencje turystyczne, aby aplikacja mogła dostosować generowany plan podróży do moich potrzeb.  
 Kryteria akceptacji:
 
-- Użytkownik uzyskuje dostęp do strony profilu.
+- Dostęp do strony profilu wymaga aktywnej sesji użytkownika.
 - Profil zawiera pola: typ podróży, budżet, styl, liczba osób, długość wyjazdu, poziom aktywności, preferowane klimaty, ograniczenia.
 - Zmiany w profilu są zapisywane i dostępne przy kolejnych logowaniach.
 
 US-003  
 Tytuł: Zarządzanie notatkami podróżniczymi  
-Opis: Jako użytkownik chcę zapisywać, edytować, przeglądać oraz usuwać notatki o przyszłych wycieczkach, aby łatwo zarządzać swoimi pomysłami na wyjazdy.  
+Opis: Jako zalogowany użytkownik chcę zapisywać, edytować, przeglądać oraz usuwać notatki o przyszłych wycieczkach, aby łatwo zarządzać swoimi pomysłami na wyjazdy.  
 Kryteria akceptacji:
 
+- Wszystkie operacje na notatkach wymagają aktywnej sesji użytkownika.
 - Użytkownik może dodać nową notatkę.
 - Użytkownik może przeglądać szczegóły notatki.
 - Użytkownik może edytować notatkę bezpośrednio w widoku szczegółów.
@@ -75,7 +76,7 @@ Kryteria akceptacji:
 
 US-004  
 Tytuł: Generowanie planu podróży  
-Opis: Jako użytkownik chcę wygenerować szczegółowy plan podróży na podstawie zapisanej notatki, aby otrzymać gotowy plan wyjazdu, uwzględniający moje preferencje.  
+Opis: Jako zalogowany użytkownik chcę wygenerować szczegółowy plan podróży na podstawie zapisanej notatki, aby otrzymać gotowy plan wyjazdu, uwzględniający moje preferencje.  
 Kryteria akceptacji:
 
 - Notatka musi zawierać od 100 do 10 000 znaków.
@@ -85,12 +86,14 @@ Kryteria akceptacji:
 
 US-005  
 Tytuł: Bezpieczny dostęp i autoryzacja  
-Opis: Jako użytkownik chcę mieć pewność, że moje dane są chronione, a dostęp do funkcji generowania planu podróży jest możliwy tylko po poprawnej autoryzacji.  
+Opis: Jako użytkownik chcę mieć pewność, że moje dane są chronione, a dostęp do wszystkich funkcji aplikacji jest możliwy tylko po poprawnej autoryzacji.  
 Kryteria akceptacji:
 
-- Funkcja generowania planu jest dostępna tylko dla zalogowanych użytkowników.
-- Próba dostępu przez niezalogowanego użytkownika skutkuje odmową i wyświetleniem stosownego komunikatu o błędzie.
+- Wszystkie ścieżki aplikacji są chronione i wymagają autentykacji.
+- Próba dostępu do chronionej funkcjonalności przez niezalogowanego użytkownika skutkuje przekierowaniem do strony logowania.
+- System przechowuje i weryfikuje tokeny sesji.
 - Mechanizm autoryzacji działa zgodnie z integracją systemu Supabase.
+- Po wylogowaniu wszystkie tokeny sesji są unieważniane.
 
 ## 6. Metryki sukcesu
 

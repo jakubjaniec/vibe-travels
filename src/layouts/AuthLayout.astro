@@ -1,0 +1,46 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="pl" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VibeTravels</title>
+    <ViewTransitions />
+  </head>
+  <body class="min-h-screen bg-background antialiased">
+    <div class="min-h-screen bg-gradient-to-b from-primary/5 via-background to-background">
+      <div
+        class="absolute inset-0 bg-grid-black/[0.02] bg-[size:20px_20px] [mask-image:linear-gradient(to_bottom,transparent,50%,white)]"
+      >
+      </div>
+
+      <div class="container relative mx-auto px-4 py-16">
+        <div class="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-primary/10 to-transparent blur-2xl"></div>
+
+        <div class="flex flex-col items-center justify-center mb-12">
+          <div class="relative z-10 text-center">
+            <h1
+              class="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent"
+            >
+              VibeTravels
+            </h1>
+            <p class="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+              Zamień swoje pomysły na podróż w spersonalizowany plan podróży z pomocą sztucznej inteligencji
+            </p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -inset-2 rounded-xl bg-gradient-to-r from-primary/20 to-primary/20 blur-xl"></div>
+          <div class="relative mx-auto max-w-lg">
+            <slot />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

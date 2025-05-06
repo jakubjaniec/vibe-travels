@@ -1,8 +1,8 @@
 ---
-import DashboardPage from "../components/DashboardPage";
-import Layout from "../layouts/Layout.astro";
+// Strona główna automatycznie przekieruje na /login dla niezalogowanych użytkowników
+// dzięki middleware
 ---
 
-<Layout title="Dashboard - VibeTravels">
-  <DashboardPage client:load />
-</Layout>
+<script>
+  window.location.href = "/dashboard";
+</script>
