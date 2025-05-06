@@ -24,13 +24,22 @@ export function RegisterForm() {
         throw new Error("Hasła nie są identyczne");
       }
 
-      if (password.length < 8) {
-        throw new Error("Hasło musi mieć co najmniej 8 znaków");
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
       }
 
-      // Backend integration will be implemented later
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error("Backend integration not implemented yet");
+      // Przekierowanie na dashboard po udanej rejestracji
+      window.location.href = "/dashboard";
     } catch (error) {
       setError(error instanceof Error ? error.message : "Wystąpił nieoczekiwany błąd");
     } finally {
