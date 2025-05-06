@@ -1,5 +1,6 @@
-import { Loader2 } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useTravelNotes } from "./hooks/useTravelNotes";
 import { NoteList } from "./NoteList";
 import { CreateNoteModal } from "./notes/create/CreateNoteModal";
@@ -15,11 +16,33 @@ export default function DashboardPage() {
     setIsCreateModalOpen(false);
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Wystąpił błąd podczas wylogowywania");
+      }
+
+      // Po pomyślnym wylogowaniu, przekieruj na stronę logowania
+      window.location.href = "/login";
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Wystąpił nieoczekiwany błąd");
+    }
+  };
+
   return (
     <main className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Your Travel Notes</h1>
-        <Button onClick={() => setIsCreateModalOpen(true)}>Add Note</Button>
+        <div className="flex items-center gap-2">
+          <Button onClick={() => setIsCreateModalOpen(true)}>Add Note</Button>
+          <Button variant="outline" size="icon" onClick={handleLogout} title="Wyloguj się">
+            <LogOut className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
 
       {loading && (
