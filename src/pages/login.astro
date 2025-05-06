@@ -1,8 +1,31 @@
 ---
 import { LoginForm } from "../components/auth/LoginForm";
-import AuthLayout from "../layouts/AuthLayout.astro";
+import { createSupabaseServerInstance } from "../db/supabase.client";
+import Layout from "../layouts/Layout.astro";
+
+// Wyłącz prerenderowanie, aby middleware działało
+export const prerender = false;
+
+// Pobierz sesję na serwerze
+const supabase = createSupabaseServerInstance({
+  cookies: Astro.cookies,
+  headers: Astro.request.headers,
+});
+
+const {
+  data: { session },
+} = await supabase.auth.getSession();
+
+// Jeśli jest sesja, przekieruj na dashboard
+if (session) {
+  return Astro.redirect("/dashboard");
+}
 ---
 
-<AuthLayout>
-  <LoginForm client:load />
-</AuthLayout>
+<Layout title="Logowanie - VibeTravels">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md px-4">
+      <LoginForm client:load />
+    </div>
+  </div>
+</Layout>

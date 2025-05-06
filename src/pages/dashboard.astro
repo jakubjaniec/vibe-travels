@@ -1,0 +1,11 @@
+---
+import DashboardPage from "../components/DashboardPage";
+import Layout from "../layouts/Layout.astro";
+
+// Wyłącz prerenderowanie, aby middleware działało
+export const prerender = false;
+---
+
+<Layout title="Dashboard - VibeTravels">
+  <DashboardPage client:load />
+</Layout>

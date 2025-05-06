@@ -13,10 +13,11 @@
 - Formularze logowania i rejestracji zostaną utworzone jako dedykowane komponenty React, umieszczone w katalogu `/src/components/auth`.
 - Każdy formularz będzie zawierał pola niezbędne do rejestracji (email, hasło) lub logowania (email, hasło).
 - Walidacja danych po stronie klienta obejmie:
-  - Format poprawności adresu email.
-  - Minimalną długość hasła (np. 8 znaków).
+- Format poprawności adresu email.
+- Minimalną długość hasła (np. 8 znaków).
+- Sprawdzenie zgodności hasła i potwierdzenia w przypadku rejestracji.
 - Komponenty będą odpowiedzialne za wyświetlanie komunikatów błędów (np. "Nieprawidłowy adres email", "Hasło jest zbyt krótkie", "Błąd logowania") oraz sukcesów, korzystając z reaktywnych mechanizmów stanu (np. hooki w React).
-- Po poprawnej walidacji, formularze będą komunikować się bezpośrednio z Supabase Auth poprzez Supabase SDK, a w przypadku sukcesu – przekierowywać użytkownika do dashboardu.
+- Po poprawnej walidacji, formularze będą komunikować się z backendem poprzez wywołania API (fetch lub Supabase SDK), a w przypadku sukcesu – przekierowywać użytkownika do strony chronionej, np. profilu.
 
 ### Integracja z Astro
 
@@ -26,7 +27,7 @@
 ### Walidacja i obsługa błędów
 
 - Walidacja po stronie klienta w komponentach React zapewni natychmiastową informację zwrotną dla użytkownika.
-- Supabase Auth obsługuje walidację danych wejściowych (np. format email, długość hasła) oraz zwraca czytelne komunikaty błędów.
+- Back-end również przeprowadzi walidację danych wejściowych (np. format email, długość hasła) oraz obsłuży nieoczekiwane wyjątki, zwracając czytelne komunikaty błędów.
 - Kluczowe przypadki obejmują:
   - Próby logowania z nieprawidłowymi danymi.
   - Próby rejestracji z już istniejącym kontem.
@@ -34,7 +35,25 @@
 
 ## 2. LOGIKA BACKENDOWA
 
-- Ze względu na pełną integrację z Supabase Auth, całość operacji autentykacji jest zarządzana przez Supabase. Formularze w aplikacji komunikują się bezpośrednio z Supabase Auth za pomocą Supabase SDK, dlatego nie są implementowane dedykowane endpointy API.
+### Struktura endpointów API
+
+- Utworzenie dedykowanych endpointów w katalogu `/src/pages/api/auth`:
+  - `POST /api/auth/register` – rejestracja nowego użytkownika.
+  - `POST /api/auth/login` – logowanie użytkownika.
+  - `POST /api/auth/logout` – wylogowywanie użytkownika.
+
+### Modele danych i walidacja wejścia
+
+- Dane wejściowe (email, hasło) są walidowane przy użyciu bibliotek wspierających TypeScript (np. zod) i/lub customowych funkcji walidacyjnych.
+- Modele danych definiowane są w `/src/types.ts`, zawierając interfejsy dla żądań i odpowiedzi API.
+- Weryfikacja poprawności danych (np. pasujący format email, minimalna liczba znaków w haśle) odbywa się na poziomie endpointów API, z natychmiastowym zwrotem błędu przy niepoprawnych danych.
+
+### Obsługa wyjątków i logowanie
+
+- Każdy endpoint API zabezpiecza się poprzez try-catch, a w przypadku wystąpienia wyjątku:
+  - Loguje błąd wewnętrzny (bez ujawniania wrażliwych danych użytkownikowi).
+  - Zwraca odpowiedni kod HTTP (np. 400, 401, 500) wraz z przyjaznym komunikatem błędu.
+- Kluczowe akcje, takie jak rejestracja i logowanie, są logowane w bazie danych, zgodnie z wymaganiami z dokumentu PRD.
 
 ### Renderowanie stron server-side
 
@@ -46,15 +65,15 @@
 ### Integracja z Supabase Auth
 
 - Wykorzystanie Supabase Auth jako podstawowego systemu zarządzania użytkownikami:
-  - Rejestracja: nowy użytkownik jest dodawany do bazy danych Supabase, przy jednoczesnym wysyłaniu ewentualnej wiadomości walidacyjnej lub aktywacyjnej.
+  - Rejestracja: nowy użytkownik jest dodawany do bazy danych Supabase.
   - Logowanie: uwierzytelnianie odbywa się przez Supabase, po czym token sesyjny jest przechowywany w ciasteczkach.
   - Wylogowywanie: token sesyjny jest usuwany, a stan aplikacji jest aktualizowany, aby odzwierciedlić brak autentykacji.
 
 ### Komponenty Systemu Autentykacji
 
-- Serwis autentykacyjny umieszczony w `/src/db` lub `/src/lib`, który integruje Supabase SDK i udostępnia funkcje: `register`, `login` oraz `logout`.
+- Serwis autentykacyjny umieszczony w `/src/db` lub `/src/lib`, który integruje Supabase SDK i dostarcza funkcje: `register`, `login` oraz `logout`.
 - Interfejsy (typy) oraz kontrakty danych zdefiniowane w `/src/types.ts`, które określają strukturę żądań i odpowiedzi między frontendem, backendem i Supabase.
-- Middleware do weryfikacji sesji, wykorzystywany zarówno w endpointach API (jeśli istnieją dodatkowe funkcjonalności) oraz stronach renderowanych serwerowo.
+- Middleware do weryfikacji sesji, wykorzystywany zarówno w endpointach API, jak i stronach renderowanych serwerowo.
 
 ## Podsumowanie
 
@@ -62,8 +81,7 @@ Specyfikacja opisuje architekturę modułu rejestracji i logowania w aplikacji V
 
 - Podział na warstwę interfejsu użytkownika, logikę backendową oraz system autentykacji.
 - Wykorzystanie technologii Astro 5, React 19, TypeScript 5, Tailwind 4, Shadcn/ui oraz Supabase Auth, zgodnie z dokumentacją techniczną projektu.
-- Komunikację formularzy bezpośrednio z Supabase Auth, co eliminuje potrzebę tworzenia dedykowanych endpointów API oraz customowej walidacji w warstwie backendu.
-- Spójne zarządzanie sesjami użytkowników oraz obsługę błędów, zapewniające bezpieczeństwo i niezawodność działania.
+- Spójne zarządzanie sesjami użytkowników, walidację danych oraz obsługę błędów, które zapewniają bezpieczeństwo i niezawodność działania.
 - Integrację komponentów, serwisów i middleware, umożliwiającą łatwe rozszerzenie funkcjonalności przy jednoczesnym zachowaniu istniejących zachowań aplikacji.
 
 Dzięki powyższej architekturze aplikacja zapewni bezpieczne, wydajne oraz przyjazne dla użytkownika zarządzanie procesem rejestracji i logowania, co jest kluczowe dla sukcesu systemu VibeTravels.

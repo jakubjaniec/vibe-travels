@@ -1,6 +1,22 @@
 ---
-// Strona główna automatycznie przekieruje na /login dla niezalogowanych użytkowników
-// dzięki middleware
+import { createSupabaseServerInstance } from "../db/supabase.client";
+
+// Wyłącz prerenderowanie, aby middleware działało
+export const prerender = false;
+
+const { cookies } = Astro;
+const supabase = createSupabaseServerInstance({ cookies, headers: Astro.request.headers });
+
+const {
+  data: { session },
+} = await supabase.auth.getSession();
+
+// Przekieruj na dashboard tylko jeśli użytkownik jest zalogowany
+if (session) {
+  return Astro.redirect("/dashboard");
+} else {
+  return Astro.redirect("/login");
+}
 ---
 
 <script>

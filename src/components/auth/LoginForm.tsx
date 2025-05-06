@@ -19,11 +19,24 @@ export function LoginForm() {
     setError(null);
 
     try {
-      // Backend integration will be implemented later
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error("Backend integration not implemented yet");
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Wystąpił błąd podczas logowania");
+      }
+
+      // Po udanym logowaniu odśwież stronę - middleware przekieruje na dashboard
+      window.location.reload();
     } catch (error) {
-      setError("Logowanie tymczasowo niedostępne. Spróbuj ponownie później.");
+      setError(error instanceof Error ? error.message : "Wystąpił nieoczekiwany błąd");
     } finally {
       setIsLoading(false);
     }
@@ -70,6 +83,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={8}
               disabled={isLoading}
               className="w-full transition-colors"
             />
