@@ -10,6 +10,7 @@ VibeTravels is a travel planning app that turns simple notes about destinations 
 - **Backend:** Supabase (PostgreSQL, Authentication, and logging).
 - **AI Integration:** Openrouter.ai for accessing a variety of AI models to generate travel plans.
 - **CI/CD & Hosting:** GitHub Actions for continuous integration/deployment and DigitalOcean for hosting via Docker.
+- **Testing:** Vitest and React Testing Library for unit/integration tests, Playwright for E2E testing, and Lighthouse for performance testing.
 
 ## Getting Started Locally
 
@@ -54,4 +55,4 @@ The project is currently in the MVP stage and under active development.
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.
