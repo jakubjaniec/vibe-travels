@@ -99,7 +99,6 @@ export default function NoteDetailsContainer({ noteId }: Props) {
           error: error instanceof Error ? error.message : "Failed to load note details. Please try again later.",
           isLoading: false,
         }));
-        console.error("Error fetching note details:", error);
       }
     };
 
@@ -107,29 +106,24 @@ export default function NoteDetailsContainer({ noteId }: Props) {
   }, [noteId]);
 
   const handleSave = async (command: UpdateTravelNoteCommand) => {
-    try {
-      const response = await fetch(`/api/travel-notes/${noteId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(command),
-      });
+    const response = await fetch(`/api/travel-notes/${noteId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(command),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.error || "Failed to update note");
-      }
-
-      const updatedNote = await response.json();
-      setViewModel((prev) => ({
-        ...prev,
-        note: updatedNote,
-      }));
-    } catch (error) {
-      console.error("Error updating note:", error);
-      throw error;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || "Failed to update note");
     }
+
+    const updatedNote = await response.json();
+    setViewModel((prev) => ({
+      ...prev,
+      note: updatedNote,
+    }));
   };
 
   const handleDelete = async () => {
@@ -148,8 +142,7 @@ export default function NoteDetailsContainer({ noteId }: Props) {
       }
 
       window.location.href = "/";
-    } catch (error) {
-      console.error("Error deleting note:", error);
+    } catch {
       setViewModel((prev) => ({
         ...prev,
         error: "Failed to delete note. Please try again later.",

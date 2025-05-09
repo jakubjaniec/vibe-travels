@@ -30,7 +30,6 @@ export default function NoteContent({ note, onSave, onDelete, isDeleting }: Prop
       setIsEditing(false);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to save changes");
-      console.error("Error saving note:", error);
     } finally {
       setIsSaving(false);
     }

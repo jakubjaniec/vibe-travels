@@ -56,7 +56,6 @@ export function NoteForm({ onCancel, onSuccess }: NoteFormProps) {
       toast.success("Note created successfully!");
       onSuccess(note);
     } catch (error) {
-      console.error("Error creating note:", error);
       toast.error(error instanceof Error ? error.message : "Failed to create note");
     } finally {
       setIsSubmitting(false);
