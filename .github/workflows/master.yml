@@ -25,7 +25,9 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: |
+          npm install -g typescript
+          npm ci --legacy-peer-deps
 
       - name: Run linter
         run: npm run lint
