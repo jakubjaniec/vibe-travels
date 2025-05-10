@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 teardown('cleanup database', async () => {
   console.log('Cleaning up test database...');
 
-  if (!process.env.SUPABASE_URL!.includes('ueardaqpl')) {
+  if (!process.env.SUPABASE_URL!.includes('gtnxfvnpv')) {
     throw new Error('Cannot run teardown on non-test database!');
   }
 
@@ -23,16 +23,16 @@ teardown('cleanup database', async () => {
     }
 
     const { error } = await supabase
-      .from('collections')
+      .from('travel_notes')
       .delete()
       .eq('user_id', process.env.E2E_USERNAME_ID);
 
     if (error) {
-      console.error('Error cleaning up collections:', error);
+      console.error('Error cleaning up travel notes:', error);
       throw error;
     }
 
-    console.log('Successfully cleaned up collections for E2E test user');
+    console.log('Successfully cleaned up travel notes for E2E test user');
   } catch (error) {
     console.error('Failed to clean up database:', error);
     throw error;
