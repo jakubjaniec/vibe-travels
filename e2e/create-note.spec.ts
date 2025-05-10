@@ -14,19 +14,22 @@ test.describe('Create Note Flow', () => {
     createNotePage = new CreateNotePage(page);
   });
 
-  test('should create a new note successfully', async () => {
+  test('should create a new note successfully', async ({ page }) => {
     // 1. Logowanie
     await loginPage.goto();
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('[data-test-id="login-email-input"]', { state: 'visible', timeout: 10000 });
     await loginPage.login('test@test.pl', 'test1234');
     await loginPage.expectSuccessfulLogin();
 
     // 2. Otwarcie formularza tworzenia notatki
+    await page.waitForSelector('[data-test-id="create-note-button"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openCreateNoteModal();
 
     // 3. Wypełnienie i wysłanie formularza
     await createNotePage.fillNoteForm(
       'My Travel Plans',
-      'I am planning a trip to Japan next spring. I want to visit Tokyo, Kyoto, and Osaka. '.repeat(5) // Minimum 100 znaków
+      'I am planning a trip to Japan next spring. I want to visit Tokyo, Kyoto, and Osaka. '.repeat(5)
     );
     await createNotePage.submitForm();
 
@@ -36,13 +39,16 @@ test.describe('Create Note Flow', () => {
     await dashboardPage.expectNotesVisible();
   });
 
-  test('should validate note form fields', async () => {
+  test('should validate note form fields', async ({ page }) => {
     // 1. Logowanie
     await loginPage.goto();
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('[data-test-id="login-email-input"]', { state: 'visible', timeout: 10000 });
     await loginPage.login('test@test.pl', 'test1234');
     await loginPage.expectSuccessfulLogin();
 
     // 2. Otwarcie formularza
+    await page.waitForSelector('[data-test-id="create-note-button"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openCreateNoteModal();
 
     // 3. Próba wysłania pustego formularza
@@ -56,13 +62,16 @@ test.describe('Create Note Flow', () => {
     await createNotePage.expectContentError('Content must be at least 100 characters');
   });
 
-  test('should cancel note creation', async () => {
+  test('should cancel note creation', async ({ page }) => {
     // 1. Logowanie
     await loginPage.goto();
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('[data-test-id="login-email-input"]', { state: 'visible', timeout: 10000 });
     await loginPage.login('test@test.pl', 'test1234');
     await loginPage.expectSuccessfulLogin();
 
     // 2. Otwarcie i anulowanie formularza
+    await page.waitForSelector('[data-test-id="create-note-button"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openCreateNoteModal();
     await createNotePage.fillNoteForm('Draft Title', 'Draft content');
     await createNotePage.cancelForm();

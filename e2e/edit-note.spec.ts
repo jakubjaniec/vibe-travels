@@ -18,9 +18,12 @@ test.describe('Edit Note Flow', () => {
 
     // Setup: Zaloguj się i stwórz notatkę do edycji
     await loginPage.goto();
+    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('[data-test-id="login-email-input"]', { state: 'visible', timeout: 10000 });
     await loginPage.login('test@test.pl', 'test1234');
     await loginPage.expectSuccessfulLogin();
 
+    await page.waitForSelector('[data-test-id="create-note-button"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openCreateNoteModal();
     await createNotePage.fillNoteForm(
       'Original Title',
@@ -30,8 +33,9 @@ test.describe('Edit Note Flow', () => {
     await createNotePage.expectSuccessfulSubmission();
   });
 
-  test('should edit existing note successfully', async () => {
+  test('should edit existing note successfully', async ({ page }) => {
     // 1. Otwórz notatkę do edycji
+    await page.waitForSelector('[data-test-id="note-item-Original Title"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openNoteEdit('Original Title');
 
     // 2. Zmodyfikuj treść notatki
@@ -47,8 +51,9 @@ test.describe('Edit Note Flow', () => {
     await dashboardPage.expectNoteTitle('Updated Title');
   });
 
-  test('should validate edited note fields', async () => {
+  test('should validate edited note fields', async ({ page }) => {
     // 1. Otwórz notatkę do edycji
+    await page.waitForSelector('[data-test-id="note-item-Original Title"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openNoteEdit('Original Title');
 
     // 2. Próba zapisania pustych pól
@@ -63,8 +68,9 @@ test.describe('Edit Note Flow', () => {
     await editNotePage.expectContentError('Content must be at least 100 characters');
   });
 
-  test('should cancel note editing', async () => {
+  test('should cancel note editing', async ({ page }) => {
     // 1. Otwórz notatkę do edycji
+    await page.waitForSelector('[data-test-id="note-item-Original Title"]', { state: 'visible', timeout: 10000 });
     await dashboardPage.openNoteEdit('Original Title');
 
     // 2. Wprowadź zmiany i anuluj
