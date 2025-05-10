@@ -57,6 +57,4 @@ jobs:
             ### Lint Status: ${{ needs.lint.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ### Tests Status: ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }}
 
-            ${{{ needs.lint.result == 'success' && needs.test.result == 'success' 
-              && '🎉 All checks passed successfully!' 
-              || '⚠️ Some checks failed. Please review the issues above.' }}}
+            ${{ needs.lint.result == 'success' && needs.test.result == 'success' && '🎉 All checks passed successfully!' || '⚠️ Some checks failed. Please review the issues above.' }}
