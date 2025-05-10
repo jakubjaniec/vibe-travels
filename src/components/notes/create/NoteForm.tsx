@@ -64,7 +64,7 @@ export function NoteForm({ onCancel, onSuccess }: NoteFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-test-id="create-note-form">
         <FormField
           control={form.control}
           name="title"
@@ -72,9 +72,9 @@ export function NoteForm({ onCancel, onSuccess }: NoteFormProps) {
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter note title..." {...field} />
+                <Input placeholder="Enter note title..." {...field} data-test-id="note-title-input" />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-test-id="note-title-error" />
             </FormItem>
           )}
         />
@@ -86,18 +86,23 @@ export function NoteForm({ onCancel, onSuccess }: NoteFormProps) {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea placeholder="Write your travel note content..." className="min-h-[200px]" {...field} />
+                <Textarea
+                  placeholder="Write your travel note content..."
+                  className="min-h-[200px]"
+                  {...field}
+                  data-test-id="note-content-input"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage data-test-id="note-content-error" />
             </FormItem>
           )}
         />
 
         <div className="flex justify-end space-x-4">
-          <Button variant="outline" type="button" onClick={onCancel}>
+          <Button variant="outline" type="button" onClick={onCancel} data-test-id="note-cancel-button">
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} data-test-id="note-submit-button">
             {isSubmitting ? "Creating..." : "Create Note"}
           </Button>
         </div>

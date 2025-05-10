@@ -38,32 +38,34 @@ export default function DashboardPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Your Travel Notes</h1>
         <div className="flex items-center gap-2">
-          <Button onClick={() => setIsCreateModalOpen(true)}>Add Note</Button>
-          <Button variant="outline" size="icon" onClick={handleLogout} title="Wyloguj się">
+          <Button onClick={() => setIsCreateModalOpen(true)} data-test-id="create-note-button">
+            Add Note
+          </Button>
+          <Button variant="outline" size="icon" onClick={handleLogout} title="Wyloguj się" data-test-id="logout-button">
             <LogOut className="h-5 w-5" />
           </Button>
         </div>
       </div>
 
       {loading && (
-        <div className="flex justify-center items-center py-8">
+        <div className="flex justify-center items-center py-8" data-test-id="notes-loading-indicator">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       )}
 
       {error && (
-        <Alert variant="destructive" className="mb-8">
+        <Alert variant="destructive" className="mb-8" data-test-id="notes-error-message">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       {!loading && !error && notes.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
+        <div className="text-center py-8 text-muted-foreground" data-test-id="empty-notes-message">
           No travel notes yet. Click &quot;Add Note&quot; to create your first note!
         </div>
       )}
 
-      {!loading && !error && notes.length > 0 && <NoteList notes={notes} />}
+      {!loading && !error && notes.length > 0 && <NoteList notes={notes} data-test-id="notes-list" />}
 
       <CreateNoteModal
         isOpen={isCreateModalOpen}

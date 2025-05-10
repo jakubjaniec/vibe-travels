@@ -50,11 +50,11 @@ export function LoginForm() {
             <LogIn className="h-8 w-8 text-primary" strokeWidth={1.6} />
             <CardTitle className="text-2xl">Zaloguj się</CardTitle>
           </div>
-          <p className="text-sm text-center text-muted-foreground">Wprowadź swoje dane logowania, aby kontynuować</p>
+          <p className="text-center text-muted-foreground">Wprowadź swoje dane logowania, aby kontynuować</p>
         </CardHeader>
         <CardContent className="space-y-6">
           {error && (
-            <Alert variant="destructive" className="text-sm">
+            <Alert variant="destructive" className="text-sm" data-test-id="login-error-message">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -71,6 +71,7 @@ export function LoginForm() {
               required
               disabled={isLoading}
               className="w-full transition-colors"
+              data-test-id="login-email-input"
             />
           </div>
           <div className="space-y-2">
@@ -86,11 +87,18 @@ export function LoginForm() {
               minLength={8}
               disabled={isLoading}
               className="w-full transition-colors"
+              data-test-id="login-password-input"
             />
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full font-medium h-11" disabled={isLoading} size="lg">
+          <Button
+            type="submit"
+            className="w-full font-medium h-11"
+            disabled={isLoading}
+            size="lg"
+            data-test-id="login-submit-button"
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -17,6 +17,6 @@ export default defineConfig({
     mode: "standalone",
   }),
   experimental: {
-    session: false,
+    session: true,
   },
 });

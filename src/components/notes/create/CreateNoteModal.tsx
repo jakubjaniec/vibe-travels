@@ -15,7 +15,7 @@ export function CreateNoteModal({ isOpen, onClose, onNoteCreated }: CreateNoteMo
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open: boolean) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open: boolean) => !open && onClose()} data-test-id="create-note-modal">
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Add New Travel Note</DialogTitle>
