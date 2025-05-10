@@ -1,0 +1,62 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test
+
+  status-comment:
+    name: Update PR Status
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Generate status comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            ## Pull Request Check Results
+
+            ### Lint Status: ${{ needs.lint.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ### Tests Status: ${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }}
+
+            ${{{ needs.lint.result == 'success' && needs.test.result == 'success' 
+              && '🎉 All checks passed successfully!' 
+              || '⚠️ Some checks failed. Please review the issues above.' }}}
