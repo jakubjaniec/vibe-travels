@@ -26,8 +26,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install -g typescript
           npm ci --legacy-peer-deps
+          npm install typescript@5.0.4
 
       - name: Run linter
         run: npm run lint
