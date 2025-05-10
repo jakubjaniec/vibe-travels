@@ -1,8 +1,8 @@
 import { includeIgnoreFile } from "@eslint/compat";
 import eslint from "@eslint/js";
-import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import eslintPluginAstro from "eslint-plugin-astro";
 import jsxA11y from "eslint-plugin-jsx-a11y";
+import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import pluginReact from "eslint-plugin-react";
 import reactCompiler from "eslint-plugin-react-compiler";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
@@ -18,8 +18,16 @@ const gitignorePath = path.resolve(__dirname, ".gitignore");
 const baseConfig = tseslint.config({
   extends: [eslint.configs.recommended, tseslint.configs.strict, tseslint.configs.stylistic],
   rules: {
-    "no-console": "warn",
+    "no-console": "off",
     "no-unused-vars": "off",
+  },
+});
+
+// Configuration for test files
+const testConfig = tseslint.config({
+  files: ["**/*.{spec,test}.{ts,tsx}", "**/e2e/**/*.ts"],
+  rules: {
+    "@typescript-eslint/no-non-null-assertion": "off",
   },
 });
 
@@ -59,6 +67,7 @@ const reactConfig = tseslint.config({
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   baseConfig,
+  testConfig,
   jsxA11yConfig,
   reactConfig,
   eslintPluginAstro.configs["flat/recommended"],

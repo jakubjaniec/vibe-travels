@@ -14,21 +14,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     const supabase = createSupabaseServerInstance({ cookies, headers: request.headers });
 
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
     });
 
     if (error) {
-      return new Response(
-        JSON.stringify({
-          error:
-            error.message === "User already registered"
-              ? "Użytkownik o podanym adresie email już istnieje"
-              : error.message,
-        }),
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ message: error.message }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Automatyczne logowanie po rejestracji
@@ -55,6 +50,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       return new Response(JSON.stringify({ error: error.errors[0].message }), { status: 400 });
     }
 
-    return new Response(JSON.stringify({ error: "Wystąpił nieoczekiwany błąd" }), { status: 500 });
+    return new Response(JSON.stringify({ message: "Failed to register" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 };

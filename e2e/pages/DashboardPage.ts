@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from '@playwright/test';
+import { type Locator, type Page, expect } from "@playwright/test";
 
 export class DashboardPage {
   readonly page: Page;
@@ -11,28 +11,28 @@ export class DashboardPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.createNoteButton = page.getByTestId('create-note-button');
-    this.logoutButton = page.getByTestId('logout-button');
-    this.loadingIndicator = page.getByTestId('notes-loading-indicator');
-    this.errorMessage = page.getByTestId('notes-error-message');
-    this.emptyMessage = page.getByTestId('empty-notes-message');
-    this.notesList = page.getByTestId('notes-list');
+    this.createNoteButton = page.getByTestId("create-note-button");
+    this.logoutButton = page.getByTestId("logout-button");
+    this.loadingIndicator = page.getByTestId("notes-loading-indicator");
+    this.errorMessage = page.getByTestId("notes-error-message");
+    this.emptyMessage = page.getByTestId("empty-notes-message");
+    this.notesList = page.getByTestId("notes-list");
   }
 
   async goto() {
-    await this.page.goto('/');
+    await this.page.goto("/");
   }
 
   async openCreateNoteModal() {
     await this.createNoteButton.click();
     // Upewniamy się, że modal jest widoczny
-    await expect(this.page.getByTestId('create-note-modal')).toBeVisible();
+    await expect(this.page.getByTestId("create-note-modal")).toBeVisible();
   }
 
   async logout() {
     await this.logoutButton.click();
     // Po wylogowaniu powinniśmy być przekierowani na stronę logowania
-    await expect(this.page).toHaveURL('/login');
+    await expect(this.page).toHaveURL("/login");
   }
 
   async waitForNotesList() {
@@ -59,13 +59,13 @@ export class DashboardPage {
   async openNoteEdit(title: string) {
     const noteCard = this.notesList.getByText(title).first();
     await expect(noteCard).toBeVisible();
-    const editButton = noteCard.getByTestId('edit-note-button');
+    const editButton = noteCard.getByTestId("edit-note-button");
     await editButton.click();
     // Upewniamy się, że modal edycji jest widoczny
-    await expect(this.page.getByTestId('edit-note-modal')).toBeVisible();
+    await expect(this.page.getByTestId("edit-note-modal")).toBeVisible();
   }
 
   async expectNoteTitle(title: string) {
     await expect(this.notesList.getByText(title).first()).toBeVisible();
   }
-} 
+}

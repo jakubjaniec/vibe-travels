@@ -1,11 +1,11 @@
-import { test as teardown } from '@playwright/test';
-import { createClient } from '@supabase/supabase-js';
+import { test as teardown } from "@playwright/test";
+import { createClient } from "@supabase/supabase-js";
 
-teardown('cleanup database', async () => {
-  console.log('Cleaning up test database...');
+teardown("cleanup database", async () => {
+  console.log("Cleaning up test database...");
 
-  if (!process.env.SUPABASE_URL!.includes('gtnxfvnpv')) {
-    throw new Error('Cannot run teardown on non-test database!');
+  if (!process.env.SUPABASE_URL!.includes("gtnxfvnpv")) {
+    throw new Error("Cannot run teardown on non-test database!");
   }
 
   const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLIC_KEY!);
@@ -18,23 +18,20 @@ teardown('cleanup database', async () => {
     });
 
     if (signInError) {
-      console.error('Error signing in:', signInError);
+      console.error("Error signing in:", signInError);
       throw signInError;
     }
 
-    const { error } = await supabase
-      .from('travel_notes')
-      .delete()
-      .eq('user_id', process.env.E2E_USERNAME_ID);
+    const { error } = await supabase.from("travel_notes").delete().eq("user_id", process.env.E2E_USERNAME_ID);
 
     if (error) {
-      console.error('Error cleaning up travel notes:', error);
+      console.error("Error cleaning up travel notes:", error);
       throw error;
     }
 
-    console.log('Successfully cleaned up travel notes for E2E test user');
+    console.log("Successfully cleaned up travel notes for E2E test user");
   } catch (error) {
-    console.error('Failed to clean up database:', error);
+    console.error("Failed to clean up database:", error);
     throw error;
   }
 });

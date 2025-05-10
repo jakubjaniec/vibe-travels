@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from '@playwright/test';
+import { type Locator, type Page, expect } from "@playwright/test";
 
 export class EditNotePage {
   readonly page: Page;
@@ -12,13 +12,13 @@ export class EditNotePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.titleInput = page.getByTestId('note-title-input');
-    this.contentInput = page.getByTestId('note-content-input');
-    this.submitButton = page.getByTestId('note-submit-button');
-    this.cancelButton = page.getByTestId('note-cancel-button');
-    this.titleError = page.getByTestId('note-title-error');
-    this.contentError = page.getByTestId('note-content-error');
-    this.successMessage = page.getByTestId('note-success-message');
+    this.titleInput = page.getByTestId("note-title-input");
+    this.contentInput = page.getByTestId("note-content-input");
+    this.submitButton = page.getByTestId("note-submit-button");
+    this.cancelButton = page.getByTestId("note-cancel-button");
+    this.titleError = page.getByTestId("note-title-error");
+    this.contentError = page.getByTestId("note-content-error");
+    this.successMessage = page.getByTestId("note-success-message");
   }
 
   async fillNoteForm(title: string, content: string) {
@@ -38,7 +38,7 @@ export class EditNotePage {
   async cancelEdit() {
     await this.cancelButton.click();
     // Upewniamy się, że modal zniknął
-    await expect(this.page.getByTestId('edit-note-modal')).not.toBeVisible();
+    await expect(this.page.getByTestId("edit-note-modal")).not.toBeVisible();
   }
 
   async expectTitleError(message: string) {
@@ -51,6 +51,6 @@ export class EditNotePage {
 
   async expectSuccessfulEdit() {
     await expect(this.successMessage).toBeVisible();
-    await expect(this.successMessage).toContainText('Note updated successfully');
+    await expect(this.successMessage).toContainText("Note updated successfully");
   }
-} 
+}

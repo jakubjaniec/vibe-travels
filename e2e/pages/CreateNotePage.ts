@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from '@playwright/test';
+import { type Locator, type Page, expect } from "@playwright/test";
 
 export class CreateNotePage {
   readonly page: Page;
@@ -12,13 +12,13 @@ export class CreateNotePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.form = page.getByTestId('create-note-form');
-    this.titleInput = page.getByTestId('note-title-input');
-    this.contentInput = page.getByTestId('note-content-input');
-    this.titleError = page.getByTestId('note-title-error');
-    this.contentError = page.getByTestId('note-content-error');
-    this.submitButton = page.getByTestId('note-submit-button');
-    this.cancelButton = page.getByTestId('note-cancel-button');
+    this.form = page.getByTestId("create-note-form");
+    this.titleInput = page.getByTestId("note-title-input");
+    this.contentInput = page.getByTestId("note-content-input");
+    this.titleError = page.getByTestId("note-title-error");
+    this.contentError = page.getByTestId("note-content-error");
+    this.submitButton = page.getByTestId("note-submit-button");
+    this.cancelButton = page.getByTestId("note-cancel-button");
   }
 
   async fillNoteForm(title: string, content: string) {
@@ -46,18 +46,18 @@ export class CreateNotePage {
 
   async expectFormSubmitting() {
     await expect(this.submitButton).toBeDisabled();
-    await expect(this.submitButton).toContainText('Creating...');
+    await expect(this.submitButton).toContainText("Creating...");
   }
 
   async expectFormReady() {
     await expect(this.submitButton).toBeEnabled();
-    await expect(this.submitButton).toContainText('Create Note');
+    await expect(this.submitButton).toContainText("Create Note");
   }
 
   async expectSuccessfulSubmission() {
     // Po udanym utworzeniu notatki, modal powinien zniknąć
     await expect(this.form).not.toBeVisible();
     // I powinniśmy wrócić do dashboardu
-    await expect(this.page).toHaveURL('/');
+    await expect(this.page).toHaveURL("/");
   }
-} 
+}
