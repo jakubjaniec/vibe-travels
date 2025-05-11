@@ -19,6 +19,7 @@
     "test:e2e:codegen": "playwright codegen"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.5.2",
     "@astrojs/node": "^9.2.1",
     "@astrojs/react": "4.2.2",
     "@astrojs/sitemap": "3.3.0",
