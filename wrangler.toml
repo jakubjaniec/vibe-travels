@@ -4,12 +4,11 @@ compatibility_flags = ["nodejs_compat"]
 
 [build]
 command = "npm run build"
-cwd = "."
 
 [site]
 bucket = "./dist/client"
 
 [[build.upload]]
-format = "service-worker"
-dir = "dist"
-main = "./dist/server/entry.mjs" 
+format = "modules"
+main = "./dist/_worker.js"
+dir = "dist" 

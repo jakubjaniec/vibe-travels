@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://vibe-travels.pages.dev",
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
