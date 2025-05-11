@@ -9,7 +9,7 @@ VibeTravels is a travel planning app that turns simple notes about destinations 
 - **Frontend:** Astro 5, React 19, TypeScript 5, Tailwind CSS 4, and Shadcn/ui.
 - **Backend:** Supabase (PostgreSQL, Authentication, and logging).
 - **AI Integration:** Openrouter.ai for accessing a variety of AI models to generate travel plans.
-- **CI/CD & Hosting:** GitHub Actions for continuous integration/deployment and DigitalOcean for hosting via Docker.
+- **CI/CD & Hosting:** GitHub Actions for continuous integration and Cloudflare Pages for deployment and hosting.
 - **Testing:** Vitest and React Testing Library for unit/integration tests, Playwright for E2E testing, and Lighthouse for performance testing.
 
 ## Getting Started Locally
